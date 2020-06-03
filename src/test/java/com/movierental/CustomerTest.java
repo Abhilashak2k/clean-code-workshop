@@ -1,95 +1,43 @@
 package com.movierental;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-
 public class CustomerTest {
 
+    private Customer customer = new Customer("Alice");
 
-    @Test
-    public void testStatementForRentalsOfLengthZero(){
-    	Customer customer = new Customer("Akash");
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "Amount owed is " + "0.0" + "\n"+ "You earned " + String.valueOf(0)
-        + " frequent renter points";
-
-    	assertEquals("It should be zero",expected ,statement);
+    @Before
+    public void setup() {
+        customer.addRental(new Rental(new Movie("Okja", 2), 1));
+        customer.addRental(new Rental(new Movie("Thor", 0), 5));
+        customer.addRental(new Rental(new Movie("Avenger", 1), 6));
     }
 
     @Test
-    public void testStatementForRentalsContainingRegularMovieForLessThanOrEqualTo2days() {
-    	Customer customer = new Customer("Akash");
-    	customer.addRental(new Rental(new Movie("xyz", Movie.REGULAR),2));
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "\t" + "xyz" + "\t" +
-    	         "2.0" + "\n"+ "Amount owed is " + "2.0" + "\n"+ "You earned " + String.valueOf(1)
-        + " frequent renter points";
+    public void shouldGenerateATextStatement() {
+        String expectedResult = "Rental Record for Alice\n" +
+                "\tOkja\t1.5\n" +
+                "\tThor\t6.5\n" +
+                "\tAvenger\t18.0\n" +
+                "Amount owed is 26.0\n" +
+                "You earned 4 frequent renter points"; // copied from <Click to see difference> by having empty expected String in assert
 
-
-    	assertEquals("",expected ,statement);	
+        assertEquals(expectedResult, customer.statement());
     }
 
     @Test
-    public void testStatementForRentalsContainingRegularMovieForMoreThan2days() {
-    	Customer customer = new Customer("Akash");
-    	customer.addRental(new Rental(new Movie("xyz", Movie.REGULAR),3));
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "\t" + "xyz" + "\t" +
-    	         "3.5" + "\n"+ "Amount owed is " + "3.5" + "\n"+ "You earned " + String.valueOf(1)
-        + " frequent renter points";
+    public void shouldGenerateAHtmlStatement() {
+        String expectedResult = "<h1>Rental Record for <b>Alice</b></h1><br/>" +
+                "Okja 1.5<br/>" +
+                "Thor 6.5<br/>" +
+                "Avenger 18.0<br/>" +
+                "Amount owed is <b>26.0</b><br/>" +
+                "You earned <b>4</b> frequent renter points"; // copied from <Click to see difference> by having empty expected String in assert
 
-
-    	assertEquals("",expected ,statement);	
+        assertEquals(expectedResult, customer.htmlStatement());
     }
 
-    @Test
-    public void testStatementForRentalsContainingNewReleaseMovieForMoreThan1days() {
-    	Customer customer = new Customer("Akash");
-    	customer.addRental(new Rental(new Movie("xyz", Movie.NEW_RELEASE),3));
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "\t" + "xyz" + "\t" +
-    	         "9.0" + "\n"+ "Amount owed is " + "9.0" + "\n"+ "You earned " + String.valueOf(2)
-        + " frequent renter points";
-
-
-    	assertEquals("",expected ,statement);	
-    }
-
-
-    @Test
-    public void test(){}
-    public void testStatementForRentalsContainingChildrenMovieForLessThanOrEqualTo3days() {
-    	Customer customer = new Customer("Akash");
-    	customer.addRental(new Rental(new Movie("xyz", Movie.CHILDRENS),3));
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "\t" + "xyz" + "\t" +
-    	         "1.5" + "\n"+ "Amount owed is " + "1.5" + "\n"+ "You earned " + String.valueOf(1)
-        + " frequent renter points";
-
-
-    	assertEquals("",expected ,statement);	
-    }
-
-    @Test
-    public void testStatementForRentalsContainingChildrenMovieForMoreThan3days() {
-    	Customer customer = new Customer("Akash");
-    	customer.addRental(new Rental(new Movie("xyz", Movie.CHILDRENS),5));
-    	String statement = customer.statement();
-    	String name = customer.getName();
-    	String expected ="Rental Record for " + name + "\n" + "\t" + "xyz" + "\t" +
-    	         "4.5" + "\n"+ "Amount owed is " + "4.5" + "\n"+ "You earned " + String.valueOf(1)
-        + " frequent renter points";
-
-
-    	assertEquals("",expected ,statement);	
-    }
 }
-
-
